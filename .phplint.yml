@@ -1,0 +1,11 @@
+path:
+  - ./web/modules
+  - ./web/themes
+extensions:
+  - php
+  - inc
+  - module
+  - install
+exclude:
+  - vendor
+  - public
