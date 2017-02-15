@@ -1,0 +1,7 @@
+api:
+  # A path (relative or absolute) to a file containing an API token.
+  # Run 'platform logout --all' if you change this value.
+  token_file: /src/config/platformcli/token
+updates:
+  # Turn off update checking since this can mess with non-interactive CI runs
+  check: false

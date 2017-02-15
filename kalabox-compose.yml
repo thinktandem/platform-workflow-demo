@@ -1,0 +1,89 @@
+##
+# Kalabox Platform compose file
+#
+
+#
+# This defines a data container to share common Platform.sh app assets such as:
+#
+data:
+
+  # Comment this and uncomment 'build' below if you want to edit your
+  # local dockerfile and build from there. This is useful for development
+  image: busybox
+
+  # Uncomment this and comment 'image' above if you want to edit your
+  # local dockerfile and build from there. This is useful for development
+  #
+  # build: ./dockerfiles/data
+
+  volumes:
+    - /certs
+    - /var/lib/mysql
+    - /code
+    - /php
+
+#
+# This defines a Platform.sh appserver.
+#
+appserver:
+  image: $KALABOX_APP_PLATFORM_APPSERVER_IMAGE
+  hostname: $KALABOX_APP_HOSTNAME
+  volumes:
+    - $KALABOX_APP_ROOT_BIND:/src
+  volumes_from:
+    - data
+  entrypoint: /src/config/scripts/php-fpm.sh
+  command: -R --fpm-config /src/config/php/www.conf -c /src/config/php -d xdebug.remote_host=$KALABOX_ENGINE_REMOTE_IP
+  working_dir: /code
+  environment:
+    DOMAIN: $KALABOX_DOMAIN
+    HOSTNAME: $KALABOX_APP_HOSTNAME
+    HOME: /code/public
+    MYSQL_HOST: $KALABOX_APP_PLATFORM_MYSQL_HOST
+    PLATFORM_APP_DIR: $KALABOX_APP_PLATFORM_APP_DIR
+    PLATFORM_APPLICATION: $KALABOX_APP_PLATFORM_APPLICATION
+    PLATFORM_APPLICATION_NAME: $KALABOX_APP_PLATFORM_APPLICATION_NAME
+    PLATFORM_BRANCH: $KALABOX_APP_PLATFORM_BRANCH
+    PLATFORM_DOCUMENT_ROOT: $KALABOX_APP_PLATFORM_DOCUMENT_ROOT
+    PLATFORM_ENVIRONMENT: $KALABOX_APP_PLATFORM_ENVIRONMENT
+    PLATFORM_PROJECT: $KALABOX_APP_PLATFORM_PROJECT
+    PLATFORM_RELATIONSHIPS: $KALABOX_APP_PLATFORM_RELATIONSHIPS
+    PLATFORM_ROUTES: $KALABOX_APP_PLATFORM_ROUTES
+    PLATFORM_TREE_ID: $KALABOX_APP_PLATFORM_TREE_ID
+    PLATFORM_VARIABLES: $KALABOX_APP_PLATFORM_VARIABLES
+    PLATFORM_PROJECT_ENTROPY: $KALABOX_APP_PLATFORM_PROJECT_ENTROPY
+    PHP_IDE_CONFIG: serverName=$KALABOX_APP_HOSTNAME
+    TERM: xterm
+
+#
+# This defines a Platform.sh webserver.
+#
+web:
+
+  # Comment this and uncomment 'build' below if you want to edit your
+  # local dockerfile and build from there. This is useful for development
+  image: nginx:1.8.1
+
+  # Uncomment this and comment 'image' above if you want to edit your
+  # local dockerfile and build from there. This is useful for development
+  #
+  # build: ./dockerfiles/nginx
+
+  hostname: $KALABOX_APP_HOSTNAME
+  ports:
+    - "80"
+    - "443"
+  volumes:
+    - $KALABOX_APP_ROOT_BIND:/src
+    - $KALABOX_APP_ROOT_BIND/config/nginx/nginx.conf:/etc/nginx/nginx.conf
+    - $KALABOX_APP_ROOT_BIND/config/nginx/drupal.conf:/etc/nginx/conf.d/default.conf
+  volumes_from:
+    - data
+  entrypoint: /src/config/scripts/nginx.sh
+  command: -g "daemon off;"
+  working_dir: /code
+  environment:
+    DOMAIN: $KALABOX_DOMAIN
+    HOSTNAME: $KALABOX_APP_HOSTNAME
+    HOME: /code/public
+    TERM: xterm

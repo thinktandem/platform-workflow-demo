@@ -1,0 +1,115 @@
+##
+#
+# Pantheon CMD configuration
+#
+# see: http://docs.kalabox.io/en/stable/users/config/#tooling
+#
+
+#
+# Adds a git command to your Pantheon app.
+#
+git:
+  service: cli
+  description: Run a git command on your codebase
+  mapping: .:/code
+
+#
+# Adds a rsync command to your Pantheon app.
+#
+rsync:
+  service: cli
+  description: Run a rsync command on your files directory
+  mapping: .:/code
+
+#
+# Adds a drush 8 command to your pantheon app.
+#
+drush:
+  service: drush
+  description: Run a version appropriate drush command on your codebase
+  mapping: .:/code
+
+#
+# Adds a regsitry rebuild command to your pantheon app.
+#
+rr:
+  service: platformcli
+  entrypoint: drush
+  description: Runs drush registry-rebuild
+  mapping: .:/code
+
+#
+# Adds a platformsh command to your pantheon app.
+#
+platform:
+  service: platformcli
+  description: Run a platform cli command
+  mapping: .:/src
+
+#
+# Adds a php cli command to your pantheon app.
+#
+php:
+  service: platformcli
+  description: Run a php cli command
+  mapping: .:/code
+
+#
+# Adds a composer command to your pantheon app.
+#
+composer:
+  service: platformcli
+  description: Run a composer cli command
+  mapping: .:/code
+
+#
+# Adds a mysql command to your pantheon app.
+#
+mysql:
+  service: appserver
+  precmdopts: -uroot
+  entrypoint: mysql
+  description: Drop into a mysql shell
+  mapping: .:/src
+
+#
+# Adds a node command to your pantheon app.
+#
+node:
+  service: platformcli
+  description: Run a node command
+  mapping: .:/code
+
+#
+# Adds a npm command to your pantheon app.
+#
+npm:
+  service: platformcli
+  postcmdopts: --unsafe-perm
+  description: Run a npm command
+  mapping: .:/code
+
+#
+# Adds a grunt command to your pantheon app.
+#
+grunt:
+  service: platformcli
+  description: Run a grunt command
+  mapping: .:/code
+
+#
+# Adds a gulp command to your pantheon app.
+#
+gulp:
+  service: platformcli
+  description: Run a gulp command
+  mapping: .:/code
+
+#
+# Adds a bower command to your pantheon app.
+#
+bower:
+  service: platformcli
+  postcmdopts: --allow-root
+  description: Run a bower command
+  mapping: .:/code

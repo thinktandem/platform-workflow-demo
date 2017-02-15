@@ -1,0 +1,16 @@
+name: platform-workflow-demo
+type: platformsh
+plugins:
+  - kalabox-plugin-platformsh
+pluginconfig:
+  cli: on
+  sharing:
+    codeDir: ./
+    share: data:/code
+  services:
+    web:
+      - port: 80/tcp
+        default: true
+      - port: 443/tcp
+        default: true
+        secure: true
