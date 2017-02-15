@@ -1,0 +1,133 @@
+##
+# This contains additional services needed by the cli plugin.
+#
+# See: http://docs.kalabox.io/en/stable/users/config/#tooling
+#
+
+#
+# Basic cli tooling.
+#
+cli:
+
+  # Comment this and uncomment 'build' below if you want to edit your
+  # local dockerfile and build from there. This is useful for development
+  image: kalabox/cli:stable
+
+  # Uncomment this and comment 'image' above if you want to edit your
+  # local dockerfile and build from there. This is useful for development
+  #
+  # build: ./dockerfiles/cli
+
+  volumes:
+    - $KALABOX_APP_ROOT_BIND:/src
+    - $KALABOX_ENGINE_HOME/.ssh:/home/root/keys
+    - $KALABOX_ENGINE_HOME/.gitconfig:/home/root/.gitconfig
+    - $KALABOX_APP_ROOT/config/scripts/usermap-cli.sh:/usr/local/bin/usermap
+  volumes_from:
+    - data
+  environment:
+    COLUMNS: 150
+    HOME: /home/root
+    KALABOX_SSH_KEY: id_rsa
+    TERM: xterm-color
+    WEBROOT: /code/public
+  working_dir: $KALABOX_CLI_WORKING_DIR
+  stdin_open: true
+  tty: true
+
+#
+# Drush
+#
+drush:
+
+  # Comment this and uncomment 'build' below if you want to edit your
+  # local dockerfile and build from there. This is useful for development
+  image: drush/drush:8-php5
+
+  # Uncomment this and comment 'image' above if you want to edit your
+  # local dockerfile and build from there. This is useful for development
+  #
+  # build: ./dockerfiles/drush
+
+  entrypoint: usermap
+  volumes:
+    - $KALABOX_APP_ROOT:/src
+    - $KALABOX_ENGINE_HOME/.ssh:/home/root/keys
+    - $KALABOX_APP_ROOT/config/drush:/home/root/.drush
+    - $KALABOX_APP_ROOT/config/scripts/usermap.sh:/usr/local/bin/usermap
+    - $KALABOX_APP_ROOT/config/platformcli/php.ini:/usr/local/etc/php/conf.d/php.ini
+  volumes_from:
+    - data
+  environment:
+    COLUMNS: 150
+    DOMAIN: $KALABOX_DOMAIN
+    HOME: /home/root
+    HOSTNAME: $KALABOX_APP_HOSTNAME
+    KALABOX_SSH_KEY: id_rsa
+    MYSQL_HOST: $KALABOX_APP_PLATFORM_MYSQL_HOST
+    PLATFORM_APP_DIR: $KALABOX_APP_PLATFORM_APP_DIR
+    PLATFORM_APPLICATION: $KALABOX_APP_PLATFORM_APPLICATION
+    PLATFORM_APPLICATION_NAME: $KALABOX_APP_PLATFORM_APPLICATION_NAME
+    PLATFORM_BRANCH: $KALABOX_APP_PLATFORM_BRANCH
+    PLATFORM_DOCUMENT_ROOT: $KALABOX_APP_PLATFORM_DOCUMENT_ROOT
+    PLATFORM_ENVIRONMENT: $KALABOX_APP_PLATFORM_ENVIRONMENT
+    PLATFORM_PROJECT: $KALABOX_APP_PLATFORM_PROJECT
+    PLATFORM_RELATIONSHIPS: $KALABOX_APP_PLATFORM_RELATIONSHIPS
+    PLATFORM_ROUTES: $KALABOX_APP_PLATFORM_ROUTES
+    PLATFORM_TREE_ID: $KALABOX_APP_PLATFORM_TREE_ID
+    PLATFORM_VARIABLES: $KALABOX_APP_PLATFORM_VARIABLES
+    PLATFORM_PROJECT_ENTROPY: $KALABOX_APP_PLATFORM_PROJECT_ENTROPY
+    TERM: xterm
+  working_dir: $KALABOX_CLI_WORKING_DIR
+  stdin_open: true
+  tty: true
+
+#
+# Platform CLI
+#
+platformcli:
+
+  # Comment this and uncomment 'build' below if you want to edit your
+  # local dockerfile and build from there. This is useful for development
+  #image: kalabox/platformcli:3.8.1
+
+  # Uncomment this and comment 'image' above if you want to edit your
+  # local dockerfile and build from there. This is useful for development
+  #
+  build: ./dockerfiles/platformcli
+
+  entrypoint: usermap
+  volumes:
+    - $KALABOX_APP_ROOT:/src
+    - $KALABOX_ENGINE_HOME/.ssh:/home/root/keys
+    - $KALABOX_APP_ROOT/config/drush:/home/root/.drush
+    - $KALABOX_APP_ROOT/config/scripts/usermap.sh:/usr/local/bin/usermap
+    - $KALABOX_APP_ROOT/config/platformcli/php.ini:/usr/local/etc/php/conf.d/php.ini
+    - $KALABOX_APP_ROOT/config/composer:/composer
+    - $KALABOX_ENGINE_HOME/.platformsh:/home/root/.platformsh
+  dns: 8.8.8.8
+  volumes_from:
+    - data
+  environment:
+    COLUMNS: 150
+    DOMAIN: $KALABOX_DOMAIN
+    HOME: /home/root
+    HOSTNAME: $KALABOX_APP_HOSTNAME
+    KALABOX_SSH_KEY: id_rsa
+    MYSQL_HOST: $KALABOX_APP_PLATFORM_MYSQL_HOST
+    PLATFORM_APP_DIR: $KALABOX_APP_PLATFORM_APP_DIR
+    PLATFORM_APPLICATION: $KALABOX_APP_PLATFORM_APPLICATION
+    PLATFORM_APPLICATION_NAME: $KALABOX_APP_PLATFORM_APPLICATION_NAME
+    PLATFORM_BRANCH: $KALABOX_APP_PLATFORM_BRANCH
+    PLATFORM_DOCUMENT_ROOT: $KALABOX_APP_PLATFORM_DOCUMENT_ROOT
+    PLATFORM_ENVIRONMENT: $KALABOX_APP_PLATFORM_ENVIRONMENT
+    PLATFORM_PROJECT: $KALABOX_APP_PLATFORM_PROJECT
+    PLATFORM_RELATIONSHIPS: $KALABOX_APP_PLATFORM_RELATIONSHIPS
+    PLATFORM_ROUTES: $KALABOX_APP_PLATFORM_ROUTES
+    PLATFORM_TREE_ID: $KALABOX_APP_PLATFORM_TREE_ID
+    PLATFORM_VARIABLES: $KALABOX_APP_PLATFORM_VARIABLES
+    PLATFORM_PROJECT_ENTROPY: $KALABOX_APP_PLATFORM_PROJECT_ENTROPY
+    TERM: xterm
+  working_dir: $KALABOX_CLI_WORKING_DIR
+  stdin_open: true
+  tty: true

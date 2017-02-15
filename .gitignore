@@ -5,6 +5,9 @@ web/core
 web/modules/contrib
 web/themes/contrib
 web/profiles/contrib
+private
+config/composer
+config/drush/cache
 
 # Ignore Drupal's file directory
 web/sites/*/files
@@ -14,3 +17,9 @@ web/sites/*/files
 
 # Ignore configuration files that may contain sensitive information.
 web/sites/*/settings.local.php
+
+# Mac
+.DS_Store
+
+# Kalabox
+logs
