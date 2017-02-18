@@ -85,7 +85,7 @@ module.exports = function(kbox, app) {
     var dbImport = [
       'platform',
       '--project=$PLATFORM_PROJECT',
-      '--environment=test',
+      '--environment=master',
       '--stdout',
       'db:dump',
       '|',
