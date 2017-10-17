@@ -1,3 +1,8 @@
+DEPRECATED!!!
+============
+
+**This is currently deprecated (although still potentially useful) in favor of https://github.com/thinktandem/platformsh-example-drupal8**
+
 Platform Workflow Demo
 ======================
 
